@@ -1,32 +1,6 @@
-# Fichiers et dossiers générés par l'environnement de développement
-/node_modules
-/.vscode
-/.idea
-
-# Fichiers de build
-/build
-/dist
-
-# Fichiers de dépendances spécifiques à certains environnements
-/.env
-/.env.local
-/.env.development
-/.env.production
-
-# Fichiers de logs
-/logs
-*.log
-
-# Fichiers de sauvegarde
-*.bak
-*.swp
-*.tmp
-
-# Fichiers de configuration de l'éditeur
-/.editorconfig
-/.eslintrc
-/.prettierrc
-
-# Fichiers de cache
-/.cache
-/.DS_Store
+backend/node_modules
+frontend/node_modules
+node_modules
+.env
+package-lock.json
+package.json
