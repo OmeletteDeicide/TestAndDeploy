@@ -1,10 +1,16 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import cors from 'cors';
 dotenv.config({ path: '../.env' });
 
 // Créer une instance de l'application Express
 const app = express();
+
+// Ajouter le middleware CORS
+app.use(cors({
+  origin: 'http://localhost:3000' // Remplacez par l'URL de votre frontend
+}));
 
 // Middleware pour parser le corps des requêtes au format JSON
 app.use(express.json());

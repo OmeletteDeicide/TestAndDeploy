@@ -3,10 +3,10 @@ import axios from 'axios';
 
 const router = express.Router();
 
-router.get('/:name', async (req, res) => {
-    const pokemonName = req.params.name;
+router.get('/:identifier', async (req, res) => {
+    const identifier = req.params.identifier;
     try {
-        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
+        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${identifier}`);
         res.json(response.data);
     } catch (error) {
         console.error(error);
@@ -19,7 +19,14 @@ router.get('/all/limit=:limit/offset=:offset', async (req, res) => {
         const limit = Number(req.params.limit) || 20;
         const offset = Number(req.params.offset) || 0;
         const response = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`);
-        res.json(response.data.results);
+        const pokemons = response.data.results;
+
+        // Récupérer les détails de chaque Pokémon
+        const details = await Promise.all(pokemons.map(pokemon => {
+            return axios.get(pokemon.url).then(response => response.data);
+        }));
+
+        res.json(details);
     } catch (error) {
         console.error('Erreur lors de la récupération des données de l\'API Pokémon:', error.message);
         console.error(error.stack);
