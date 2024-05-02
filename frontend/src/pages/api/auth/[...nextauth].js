@@ -4,7 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import * as mongoose from "mongoose";
 import dbConnect from "../../../utils/dbConnect";
 import User from "../../../models/User";
-import { verifyPassword } from "../../../utils/auth";
+import { verifyPassword, hashPassword } from "../../../utils/auth";
 
 export const authOptions = {
   providers: [
@@ -19,23 +19,21 @@ export const authOptions = {
         password: { label: "Password", type: "password", placeholder: "Enter your password" }
       },
       authorize: async (credentials) => {
-        await dbConnect(); // Make sure database connection is established
-        const user = await User.findOne({ email: credentials.email }); // Find user by email
-
-        // Log the email of the user attempting to log in
-        console.log('Login attempt:', credentials.email);
-
+        await dbConnect(); // Assurez-vous que la connexion à la base de données est établie
+        let user = await User.findOne({ email: credentials.email }); // Recherche de l'utilisateur par email
+    
         if (user) {
-            const isValid = await verifyPassword(credentials.password, user.password); // Verify password
-            console.log('Password validation result for', credentials.email, ':', isValid); // Log the result of password validation
-
-            if (isValid) {
-                return user; // Return user object on success
-            } else {
-                throw new Error("Invalid email or password"); // Throw error if password validation fails
-            }
+          const isValid = await verifyPassword(credentials.password, user.password); // Vérification du mot de passe
+          if (isValid) {
+            return user; // Retourner l'objet utilisateur en cas de succès
+          } else {
+            throw new Error("Invalid email or password"); // Lancer une erreur si la validation du mot de passe échoue
+          }
         } else {
-            throw new Error("No user found with this email"); // Throw error if no user is found
+          // Créer un nouvel utilisateur si aucun n'est trouvé
+          const hashedPassword = await hashPassword(credentials.password); // Assurez-vous d'implémenter cette fonction
+          user = await User.create({ email: credentials.email, password: hashedPassword });
+          return user; // Retourner le nouvel utilisateur
         }
       }
     }),

@@ -5,33 +5,30 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import dbConnect from "@/utils/dbConnect";
-import User from "@/models/User"; // Assurez-vous que le chemin d'importation est correct
+import { verifyPassword, hashPassword } from "@/utils/auth";
+
 
 const RegistrationForm = () => {
-  const handleRegistration = async (event) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const email = formData.get("email");
-    const password = formData.get("password");
-
-    try {
-        await dbConnect();
-      // Créer un nouvel utilisateur avec Mongoose
-      const newUser = new User({ email, password }); // Créez un nouvel utilisateur avec les données du formulaire
-
-      // Enregistrer le nouvel utilisateur dans la base de données
-      await newUser.save();
-
-      console.log("User registered:", newUser);
-
-      // Redirection vers la page de connexion
-      router.push("/login");
-    } catch (error) {
-      console.error("Registration failed:", error);
-      // Gérer les erreurs d'enregistrement, par exemple afficher un message d'erreur à l'utilisateur
-    }
-  };
-
+    const handleRegistration = async (event) => {
+        event.preventDefault();
+        const email = event.target.email.value;
+        const password = event.target.password.value;
+    
+        const result = await signIn('credentials', {
+          redirect: false,  // Ne pas rediriger automatiquement
+          email: email,
+          password: password,
+          callbackUrl: `/login` // Page de redirection après la connexion
+        });
+    
+        if (result.error) {
+          // Handle errors here, such as displaying a notification
+          console.error("Registration or login failed:", result.error);
+        } else {
+          // Redirect on success
+          if (result.url) router.push(result.url);
+        }
+      };
   const handleGoogleRegistration = async () => {
     // L'inscription avec Google se fait en fait par la connexion via Google
     // Après la connexion, si l'utilisateur n'existe pas dans votre base de données, vous pouvez l'enregistrer

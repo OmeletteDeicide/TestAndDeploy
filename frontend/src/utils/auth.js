@@ -1,11 +1,12 @@
-// Exemple de fonction verifyPassword
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs'; 
+
+const saltRounds = 10;
+
+export async function hashPassword(password) {
+  return await bcrypt.hash(password, saltRounds);
+}
 
 export async function verifyPassword(password, hashedPassword) {
-  try {
-    return await bcrypt.compare(password, hashedPassword);
-  } catch (error) {
-    console.error('Error verifying password:', error);
-    return false; // Retourne false en cas d'erreur
-  }
+  return await bcrypt.compare(password, hashedPassword);
 }
+
