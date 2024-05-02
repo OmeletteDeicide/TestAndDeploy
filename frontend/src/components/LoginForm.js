@@ -1,27 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Alert from '@mui/material/Alert';
 
 const LoginForm = () => {
+    const [error, setError] = useState('');
+
     const handleLogin = async (event) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
         const email = formData.get('email');
         const password = formData.get('password');
 
-        // Ici, vous pouvez appeler signIn avec des identifiants, ou adapter selon votre méthode d'auth
-        await signIn('credentials', {
-            redirect: false,
+        // Appeler signIn et gérer la réponse
+        const result = await signIn('credentials', {
+            redirect: false, // Ne pas rediriger automatiquement
             email,
             password
         });
+
+        // Gérer les erreurs ou la réussite de la connexion
+        if (result.error) {
+            setError(result.error);
+        }
     };
 
     const handleGoogleSignIn = async () => {
-        await signIn('google', { callbackUrl: 'URL_DE_RETOUR' });
+        // La redirection est gérée automatiquement par NextAuth pour Google
+        await signIn('google');
     };
 
     return (
@@ -34,6 +43,11 @@ const LoginForm = () => {
             <Typography component="h1" variant="h5">
                 Sign in
             </Typography>
+            {error && (
+                <Alert severity="error" sx={{ width: '100%', mt: 2 }}>
+                    {error} {/* Affichage des erreurs */}
+                </Alert>
+            )}
             <TextField
                 margin="normal"
                 required
