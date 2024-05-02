@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { getPokemons } from '../app/services/pokemonApi';
 import styles from '../app/styles/AllPokemons.module.css';
 import Link from 'next/link';
+import typeColors from '../app/styles/typeColors'; 
 
 export default function AllPokemons() {
     const [pokemons, setPokemons] = useState([]);
@@ -17,12 +18,16 @@ export default function AllPokemons() {
             {pokemons && pokemons.map((pokemon, index) => {
                 const hpStat = pokemon.stats.find(stat => stat.name === 'hp');
                 return (
-                    <Link href={`/pokemon/${pokemon.name}`} key={index}> {/* Utilisez le composant Link ici */}
-                        <a>
-                            <div className={styles.pokemonCard}>
-                                <h2>{pokemon.name}</h2>
-                                {hpStat && <p>HP de base: {hpStat.base_stat}</p>}
-                                <p>Types: {pokemon.types.map(type => type.type.name).join(', ')}</p>
+                    <Link href={`/pokemon/${pokemon.name}`} key={index} legacyBehavior>
+                        <a className={styles.pokemonCard}>
+                            <h2>{pokemon.name}</h2>
+                            {hpStat && <p>HP: {hpStat.base_stat}</p>}
+                            <div className={styles.typesContainer}>
+                                {pokemon.types.map((type, idx) => (
+                                    <span key={idx} style={{ backgroundColor: typeColors[type.type.name], color: 'white' }} className={styles.type}>
+                                        {type.type.name}
+                                    </span>
+                                ))}
                             </div>
                         </a>
                     </Link>
