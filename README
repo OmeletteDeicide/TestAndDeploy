@@ -1,0 +1,20 @@
+/* BACKEND */
+
+cd backend 
+
+/* Pour installer les packages du backend 
+
+npm install 
+
+/* Pour lancer le backend */
+
+node .\src\app.js 
+
+/* Frontend */
+
+cd frontend 
+
+npm install 
+
+npm run dev
+
