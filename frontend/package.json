@@ -16,6 +16,7 @@
     "axios": "^1.6.8",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
+    "js-cookie": "^3.0.5",
     "mongoose": "^8.3.3",
     "next": "14.2.3",
     "next-auth": "^4.24.7",
