@@ -15,6 +15,9 @@ const Navbar = () => {
         </Link>
         {session && status === "authenticated" ? (
           <>
+            <Link href="/FavoritePokemons" passHref>
+              <Button color="inherit">Favorites</Button>
+            </Link>
             <Button color="inherit" onClick={() => signOut({ callbackUrl: '/login' })}>
               Disconnect
             </Button>

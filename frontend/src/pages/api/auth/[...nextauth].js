@@ -1,9 +1,8 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import * as mongoose from "mongoose";
 import dbConnect from "../../../utils/dbConnect";
-import User from "../../../models/User";
+import User from "../../../models/user";
 import { verifyPassword, hashPassword } from "../../../utils/auth";
 
 export const authOptions = {
