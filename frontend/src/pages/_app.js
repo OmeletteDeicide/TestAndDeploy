@@ -8,8 +8,7 @@ export default function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     const securePage = async () => {
-      const session = await getSession();
-      console.log("Session:", session); // Ajouter ce log pour débugger
+      const session = await getSession(); 
       if (!session && !['/login', '/register'].includes(router.pathname)) {
         router.push('/login');
       }

@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
-import { signIn } from 'next-auth/react';
+import React, { useState, useEffect } from 'react';
+import { signIn, useSession } from 'next-auth/react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Alert from '@mui/material/Alert';
+import { useRouter } from 'next/router';
+
 
 const LoginForm = () => {
     const [error, setError] = useState('');
+    const router = useRouter();
+    const { data: session } = useSession();
+    useEffect(() => {
+        if (session) router.push('/')
+    }, [session, router]);
 
     const handleLogin = async (event) => {
         event.preventDefault();
@@ -19,7 +26,8 @@ const LoginForm = () => {
         const result = await signIn('credentials', {
             redirect: false, // Ne pas rediriger automatiquement
             email,
-            password
+            password,
+            callbackUrl: '/',
         });
 
         // Gérer les erreurs ou la réussite de la connexion
