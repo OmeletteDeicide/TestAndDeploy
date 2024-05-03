@@ -2,6 +2,10 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import authRouter from './routes/auth.js';
+import pokemonRouter from './routes/pokemon.js';
+import favoritesRouter from './routes/favorites.js';
+
 dotenv.config({ path: '../.env' });
 
 // Créer une instance de l'application Express
@@ -37,11 +41,9 @@ mongoose.connect(process.env.MONGODB_URI, {
 });
 
 // Monter les routes de l'application
-import authRouter from './routes/auth.js';
 app.use('/auth', authRouter); // Montage des routes d'authentification sous le préfixe /auth
-
-import pokemonRouter from './routes/pokemon.js';
 app.use('/pokemon', pokemonRouter); // Montage des routes Pokémon sous le préfixe /pokemon
+app.use('/favorites', favoritesRouter); // Montage des routes de favoris sous le préfixe /favorites
 
 // Démarrer le serveur HTTP
 const PORT = process.env.PORT || 8080;
