@@ -3,7 +3,7 @@ import Favorite from '../models/Favorite.js';
 
 const router = express.Router();
 
-router.post('/', async (req, res) => {
+router.post('/user', async (req, res) => {
   const favorite = new Favorite({
     userId: req.body.userId,
     pokemonId: req.body.pokemonId
@@ -17,7 +17,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.delete('/:id', getFavorite, async (req, res) => {
+router.delete('/user/:id', getFavorite, async (req, res) => {
   try {
     await res.favorite.remove();
     res.json({ message: 'Deleted Favorite' });
@@ -26,7 +26,7 @@ router.delete('/:id', getFavorite, async (req, res) => {
   }
 });
 
-router.get('/', async (req, res) => {
+router.get('/user', async (req, res) => {
   try {
     const favorites = await Favorite.find({ userId: req.query.userId });
     res.json(favorites);
@@ -35,7 +35,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:userId', async (req, res) => {
+router.get('/user/:userId', async (req, res) => {
     try {
       const favorites = await Favorite.find({ userId: req.params.userId });
       res.json(favorites);
