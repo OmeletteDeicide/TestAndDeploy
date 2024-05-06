@@ -19,4 +19,24 @@ describe('Test des routes Pokémon', () => {
         expect(res.statusCode).toEqual(200);
         expect(res.body).toEqual(expect.arrayContaining([expect.objectContaining({ name: expect.stringContaining('pi') })]));
     });
+    
+    test('GET /:identifier renvoie une erreur pour un Pokémon inconnu', async () => {
+        const res = await request(app).get('/pokemon/unknownpokemon');
+        expect(res.statusCode).toEqual(500);
+    });
+
+    test('GET /all/limit=:limit/offset=:offset renvoie une erreur pour une limite invalide', async () => {
+        const res = await request(app).get('/pokemon/all/limit=invalid/offset=0');
+        expect(res.statusCode).toEqual(500);
+    });
+
+    test('GET /all/limit=:limit/offset=:offset renvoie une erreur pour un décalage invalide', async () => {
+        const res = await request(app).get('/pokemon/all/limit=10/offset=invalid');
+        expect(res.statusCode).toEqual(500);
+    });
+
+    test('GET /search/:name renvoie une erreur pour un nom invalide', async () => {
+        const res = await request(app).get('/pokemon/search/123');
+        expect(res.statusCode).toEqual(500);
+    });
 });
